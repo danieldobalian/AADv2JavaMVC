@@ -1,7 +1,6 @@
 package com.danieldobalian.controller;
 
 import java.io.IOException;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
@@ -9,7 +8,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
@@ -18,9 +16,6 @@ import org.springframework.web.context.request.WebRequest;
 import com.github.scribejava.core.oauth.OAuth20Service;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth2AccessToken;
-import com.github.scribejava.core.model.OAuthRequest;
-import com.github.scribejava.core.model.Response;
-import com.github.scribejava.core.model.Verb;
 import com.github.kevinsawicki.http.HttpRequest;
 
 @Controller
@@ -60,7 +55,7 @@ public class MicrosoftLogin {
      @RequestMapping(value={""}, method = RequestMethod.GET)
      public String callback(WebRequest request, ModelMap model,
     		 @RequestParam(value="oauth_token", required=false) String oauthToken, 
-    		 @RequestParam(value="code", required=false) String oauthVerifier, 
+    		 @RequestParam(value="code", required=false) String oauthCode, 
     		 @RequestParam(value="state") String state, HttpSession session) throws IOException {
     	
     	 /* Verify the State has not been changed */
@@ -70,7 +65,7 @@ public class MicrosoftLogin {
     	 }
     	 
         /* Trade the Request Token and Verifier for the Access Token */
-        final OAuth2AccessToken tokens = service.getAccessToken(oauthVerifier);
+        final OAuth2AccessToken tokens = service.getAccessToken(oauthCode);
         
         /* Print out some of the data being passed around */
         System.out.println("\n\n----Data Returned from Auth Code exchange--------\n" + tokens.toString());
@@ -81,16 +76,16 @@ public class MicrosoftLogin {
         req = req.authorization("Bearer " + tokens.getAccessToken()).acceptJson();
         
         /* Check the response */
-        String meEndpoint = "";
+        String userProfile = "";
         if(req.ok()) {
-        	meEndpoint = req.body().toString();
-        	System.out.println("\n\n------Response---------\n" + meEndpoint);
+        	userProfile = req.body().toString();
+        	System.out.println("\n\n------Response---------\n" + userProfile);
         } else {
         	System.out.println("Http Request failed");
         }
           
         /* Stick the response into UI */
-        model.addAttribute("message", meEndpoint);
+        model.addAttribute("message", userProfile);
 		return "login";
 	}
 }
