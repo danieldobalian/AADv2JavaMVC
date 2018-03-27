@@ -18,7 +18,7 @@ If you followed the guide above, you should now be able to use the same steps to
 
 This app uses the Scribe Java oAuth2.0 Library for all Identity code, Spring for the simple MVC app, and Apache Tomcat to host the local webserver.
 
-###Frameworks
+### Frameworks
 
 [Scribe Java](https://github.com/scribejava/scribejava)
 
@@ -26,7 +26,7 @@ This app uses the Scribe Java oAuth2.0 Library for all Identity code, Spring for
 
 [Spring](https://spring.io/)
 
-###Helpful Samples 
+### Helpful Samples 
 
 [Setting up your environment & Spring Sample](http://crunchify.com/simplest-spring-mvc-hello-world-example-tutorial-spring-model-view-controller-tips/)
 
